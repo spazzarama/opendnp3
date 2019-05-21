@@ -35,18 +35,24 @@ class CountingSOEHandler final : public opendnp3::ISOEHandler
 	std::mutex mutex;
 	std::condition_variable cv;
 	size_t count = 0;
+	size_t target = 0;
 
 public:
 
 	void WaitForCount(size_t num, std::chrono::steady_clock::duration timeout)
 	{
-		std::unique_lock<std::mutex> lock(mutex);
+
+		std::unique_lock<std::mutex> lock(mutex);		
+
+		this->target = num;
+
 		auto equals_num = [this, num]() -> bool { return this->count == num; };
 
 		if (!cv.wait_for(lock, timeout, equals_num))
 		{
 			throw std::logic_error("timeout waiting for count");
 		}
+
 		count -= num;
 	}
 
@@ -57,8 +63,11 @@ public:
 
 	virtual void End() override
 	{
+		const bool notify = count == target;
 		mutex.unlock();
-		cv.notify_all();
+		if (notify) {
+			cv.notify_one();
+		}
 	}
 
 	virtual void Process(const HeaderInfo& info, const ICollection<Indexed<Binary>>& values) override
