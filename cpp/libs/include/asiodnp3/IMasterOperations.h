@@ -26,6 +26,7 @@
 #include <opendnp3/StackStatistics.h>
 #include <opendnp3/app/ClassField.h>
 #include <opendnp3/app/MeasurementTypes.h>
+#include <opendnp3/app/OctetString.h>
 #include <opendnp3/gen/FunctionCode.h>
 #include <opendnp3/gen/RestartType.h>
 #include <opendnp3/master/HeaderTypes.h>
@@ -129,6 +130,14 @@ public:
      * Write a time and interval object to a specific index
      */
     virtual void Write(const opendnp3::TimeAndInterval& value,
+                       uint16_t index,
+                       const opendnp3::TaskConfig& config = opendnp3::TaskConfig::Default())
+        = 0;
+
+    /**
+     * Write a octetstring object to a specific index
+     */
+    virtual void Write(const opendnp3::OctetString& value,
                        uint16_t index,
                        const opendnp3::TaskConfig& config = opendnp3::TaskConfig::Default())
         = 0;

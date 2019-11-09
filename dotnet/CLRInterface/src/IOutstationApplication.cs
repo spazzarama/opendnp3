@@ -44,6 +44,10 @@ namespace Automatak.DNP3.Interface
 
         bool WriteTimeAndInterval(IEnumerable<IndexedValue<TimeAndInterval>> values);
 
+        bool SupportsWrites { get; }
+
+        bool Write(IEnumerable<IndexedValue<OctetString>> values);
+
         /// <summary>
         /// Query about class assigment support
         /// </summary>
@@ -118,6 +122,13 @@ namespace Automatak.DNP3.Interface
                 return false;
             }
             
+        }
+
+        bool IOutstationApplication.SupportsWrites {  get { return false; } }
+
+        bool IOutstationApplication.Write(IEnumerable<IndexedValue<OctetString>> values)
+        {
+            return false;
         }
 
         bool IOutstationApplication.WriteAbsoluteTime(UInt64 millisecSinceEpoch)

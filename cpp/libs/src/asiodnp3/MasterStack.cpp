@@ -162,6 +162,14 @@ void MasterStack::Write(const TimeAndInterval& value, uint16_t index, const Task
     return this->executor->strand.post(add);
 }
 
+void MasterStack::Write(const OctetString& value, uint16_t index, const TaskConfig& config)
+{
+    auto add = [self = this->shared_from_this(), value, index, config]() {
+        return self->mcontext.Write(value, index, config);
+    };
+    return this->executor->strand.post(add);
+}
+
 void MasterStack::Restart(RestartType op, const RestartOperationCallbackT& callback, TaskConfig config)
 {
     auto add = [self = this->shared_from_this(), op, callback, config]() {

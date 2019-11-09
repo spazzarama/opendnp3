@@ -86,6 +86,19 @@ namespace Automatak
 				return proxy->WriteTimeAndInterval(list);
 			}
 
+			bool OutstationApplicationAdapter::SupportsWrites()
+            {
+                return proxy->SupportsWrites;
+            }
+
+            bool OutstationApplicationAdapter::Write(
+                const opendnp3::ICollection<opendnp3::Indexed<opendnp3::OctetString>>& values)
+            {
+                auto list = Conversions::ToIndexedEnumerable<OctetString ^>(values);
+
+                return proxy->Write(list);
+            }
+
 			bool OutstationApplicationAdapter::SupportsAssignClass()
 			{
 				return proxy->SupportsAssignClass();

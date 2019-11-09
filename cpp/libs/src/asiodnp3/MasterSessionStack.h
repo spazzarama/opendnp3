@@ -93,6 +93,9 @@ public:
     virtual void Write(const opendnp3::TimeAndInterval& value,
                        uint16_t index,
                        const opendnp3::TaskConfig& config) override;
+    virtual void Write(const opendnp3::OctetString& value,
+                       uint16_t index,
+                       const opendnp3::TaskConfig& config) override;
     virtual void Restart(opendnp3::RestartType op,
                          const opendnp3::RestartOperationCallbackT& callback,
                          opendnp3::TaskConfig config) override;

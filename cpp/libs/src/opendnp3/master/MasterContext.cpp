@@ -32,6 +32,10 @@
 #include "opendnp3/master/UserPollTask.h"
 #include "opendnp3/objects/Group12.h"
 #include "opendnp3/objects/Group41.h"
+#include "opendnp3/objects/Group112.h"
+
+#include "opendnp3/outstation/StaticWriters.h"
+#include "opendnp3/outstation/OctetStringSerializer.h"
 
 #include <utility>
 
@@ -372,6 +376,25 @@ void MContext::Write(const TimeAndInterval& value, uint16_t index, TaskConfig co
 
     const auto timeout = this->executor->GetTime().Add(params.taskStartTimeout);
     auto task = std::make_shared<EmptyResponseTask>(this->tasks.context, *this->application, "WRITE TimeAndInterval",
+                                                    FunctionCode::WRITE, builder, timeout, this->logger, config);
+    this->ScheduleAdhocTask(task);
+}
+
+//WORK IN PROGRESS TO SUPPORT WRITING VT Object 112 (identical to OctetString)
+void MContext::Write(const OctetString& value, uint16_t index, TaskConfig config)
+{
+	auto builder = [value, index](HeaderWriter& writer) -> bool { 
+		const OctetStringSerializer serializer(false, value.Size());
+        
+		return writer.WriteSingleIndexedValue<UInt16, OctetString>(QualifierCode::UINT16_CNT_UINT16_INDEX, serializer, value, index);
+		//auto iter = writer.IterateOverCountWithPrefix<UInt16>(
+  //          QualifierCode::UINT16_CNT_UINT16_INDEX,
+  //          serializer); // .WriteRangeHeader<>(QualifierCode::UINT16_FREE_FORMAT, Group112Var0::ID(), 
+		//return iter.Write(value, index);
+    };
+
+    const auto timeout = this->executor->GetTime().Add(params.taskStartTimeout);
+    auto task = std::make_shared<EmptyResponseTask>(this->tasks.context, *this->application, "WRITE OctetString",
                                                     FunctionCode::WRITE, builder, timeout, this->logger, config);
     this->ScheduleAdhocTask(task);
 }

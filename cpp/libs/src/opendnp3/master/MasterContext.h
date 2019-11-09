@@ -145,6 +145,7 @@ public:
     /// ---- Write tasks -----
 
     void Write(const TimeAndInterval& value, uint16_t index, TaskConfig config = TaskConfig::Default());
+    void Write(const OctetString& value, uint16_t index, TaskConfig config = TaskConfig::Default());
 
     void Restart(RestartType op, const RestartOperationCallbackT& callback, TaskConfig config = TaskConfig::Default());
 

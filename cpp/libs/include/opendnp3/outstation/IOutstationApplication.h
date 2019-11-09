@@ -24,6 +24,7 @@
 
 #include "opendnp3/app/Indexed.h"
 #include "opendnp3/app/MeasurementTypes.h"
+#include "opendnp3/app/OctetString.h"
 #include "opendnp3/app/parsing/ICollection.h"
 #include "opendnp3/gen/AssignClassType.h"
 #include "opendnp3/gen/PointClass.h"
@@ -46,6 +47,14 @@ public:
     /// If this function returns false, WriteAbsoluteTime will never be called
     /// and the outstation will return IIN 2.1 (FUNC_NOT_SUPPORTED)
     virtual bool SupportsWriteAbsoluteTime()
+    {
+        return false;
+    }
+
+	/// Queries whether the the outstation supports arbitrary writes
+    /// If this function returns false, Write will never be called
+    /// and the outstation will return IIN 2.1 (FUNC_NOT_SUPPORTED)
+	virtual bool SupportsWrites()
     {
         return false;
     }
@@ -73,6 +82,16 @@ public:
     /// @return boolean value indicating if the values supplied were accepted. Returning
     /// false will cause the outstation to set IIN 2.3 (PARAM_ERROR) in its response.
     virtual bool WriteTimeAndInterval(const ICollection<Indexed<TimeAndInterval>>& values)
+    {
+        return false;
+    }
+
+    /// Write one or more OctetString values. Only called if SupportsWrite returns true.
+    /// The outstation application code is reponsible for updating TimeAndInterval values in the database if this
+    /// behavior is desired
+    /// @return boolean value indicating if the values supplied were accepted. Returning
+    /// false will cause the outstation to set IIN 2.3 (PARAM_ERROR) in its response.
+	virtual bool Write(const ICollection<Indexed<OctetString>>& values)
     {
         return false;
     }

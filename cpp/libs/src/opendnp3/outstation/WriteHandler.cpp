@@ -112,4 +112,15 @@ IINField WriteHandler::ProcessHeader(const PrefixHeader& /*header*/,
     return application->WriteTimeAndInterval(values) ? IINField::Empty() : IINBit::PARAM_ERROR;
 }
 
+IINField WriteHandler::ProcessHeader(const PrefixHeader& /*header*/,
+                                     const ICollection<Indexed<OctetString>>& values)
+{
+    if (!application->SupportsWrites())
+    {
+        return IINBit::FUNC_NOT_SUPPORTED;
+    }
+
+    return application->Write(values) ? IINField::Empty() : IINBit::PARAM_ERROR;
+}
+
 } // namespace opendnp3

@@ -55,6 +55,9 @@ private:
     virtual IINField ProcessHeader(const PrefixHeader& header,
                                    const ICollection<Indexed<TimeAndInterval>>& values) override;
 
+	virtual IINField ProcessHeader(const PrefixHeader& header,
+                                   const ICollection<Indexed<OctetString>>& values) override;
+
     IOutstationApplication* application;
     TimeSyncState* timeSyncState;
     AppSeqNum seq;

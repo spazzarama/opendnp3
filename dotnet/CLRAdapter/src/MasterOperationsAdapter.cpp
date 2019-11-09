@@ -66,12 +66,19 @@ namespace Automatak
 				return proxy->CompletionTask;
 			}
 
-			Task<TaskCompletion>^ MasterOperationsAdapter::Write(TimeAndInterval^ value, System::UInt16 index, TaskConfig^ config)
-			{
-				auto proxy = gcnew TaskCompletionProxy(config->callback);
-				operations->Write(Conversions::ConvertMeas(value), index, MasterConversions::Convert(config, proxy));
-				return proxy->CompletionTask;
-			}
+			Task<TaskCompletion> ^ MasterOperationsAdapter::Write(TimeAndInterval ^ value, System::UInt16 index, TaskConfig ^ config)
+            {
+                auto proxy = gcnew TaskCompletionProxy(config->callback);
+                operations->Write(Conversions::ConvertMeas(value), index, MasterConversions::Convert(config, proxy));
+                return proxy->CompletionTask;
+            }
+
+            Task<TaskCompletion> ^ MasterOperationsAdapter::Write(OctetString ^ value, System::UInt16 index, TaskConfig ^ config)
+            {
+                auto proxy = gcnew TaskCompletionProxy(config->callback);
+                operations->Write(Conversions::ConvertMeas(value), index, MasterConversions::Convert(config, proxy));
+                return proxy->CompletionTask;
+            }
 
 			Task<RestartResultType^>^ MasterOperationsAdapter::Restart(RestartType restartType, TaskConfig^ config)
 			{

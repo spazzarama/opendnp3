@@ -105,6 +105,11 @@ namespace Automatak.DNP3.Interface
         /// <summary>
         /// Write a time and value object
         /// </summary>
+        Task<TaskCompletion> Write(OctetString value, System.UInt16 index, TaskConfig config);
+
+        /// <summary>
+        /// Write a time and value object
+        /// </summary>
         Task<RestartResultType> Restart(RestartType restartType, TaskConfig config);
 
         /// <summary>

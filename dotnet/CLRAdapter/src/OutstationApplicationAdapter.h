@@ -60,6 +60,10 @@ namespace Automatak
 				
 				virtual bool WriteTimeAndInterval(const opendnp3::ICollection<opendnp3::Indexed<opendnp3::TimeAndInterval>>& values) override final;
 
+				virtual bool SupportsWrites() override final;
+
+				virtual bool Write(const opendnp3::ICollection<opendnp3::Indexed<opendnp3::OctetString>>& values) override final;
+
 				virtual bool SupportsAssignClass() override final;
 
 				virtual void RecordClassAssignment(opendnp3::AssignClassType type, opendnp3::PointClass clazz, uint16_t start, uint16_t stop) override final;

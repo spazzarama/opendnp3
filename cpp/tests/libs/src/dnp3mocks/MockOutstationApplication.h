@@ -38,7 +38,8 @@ public:
           warmRestartSupport(RestartMode::UNSUPPORTED),
           coldRestartSupport(RestartMode::UNSUPPORTED),
           warmRestartTimeDelay(0),
-          coldRestartTimeDelay(0)
+          coldRestartTimeDelay(0),
+          supportsWrites(true)
     {
     }
 
@@ -70,6 +71,19 @@ public:
     virtual bool WriteTimeAndInterval(const ICollection<Indexed<TimeAndInterval>>& meas) override final
     {
         auto push = [this](const Indexed<TimeAndInterval>& value) { this->timeAndIntervals.push_back(value); };
+
+        meas.ForeachItem(push);
+        return true;
+    }
+
+	virtual bool SupportsWrites() override final
+	{
+        return supportsWrites;
+	}
+
+    virtual bool Write(const ICollection<Indexed<OctetString>>& meas) override final
+    {
+        auto push = [this](const Indexed<OctetString>& value) { this->octetStrings.push_back(value); };
 
         meas.ForeachItem(push);
         return true;
@@ -116,6 +130,8 @@ public:
     bool supportsTimeWrite;
     bool supportsAssignClass;
     bool supportsWriteTimeAndInterval;
+    
+	bool supportsWrites;
 
     bool allowTimeWrite;
 
@@ -130,6 +146,7 @@ public:
     std::deque<openpal::UTCTimestamp> timestamps;
     std::deque<std::tuple<AssignClassType, PointClass, uint16_t, uint16_t>> classAssignments;
     std::deque<Indexed<TimeAndInterval>> timeAndIntervals;
+    std::deque<Indexed<OctetString>> octetStrings;
 };
 
 } // namespace opendnp3

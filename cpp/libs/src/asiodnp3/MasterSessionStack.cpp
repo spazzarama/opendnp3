@@ -197,6 +197,13 @@ void MasterSessionStack::Write(const TimeAndInterval& value, uint16_t index, con
     return executor->strand.post(action);
 }
 
+void MasterSessionStack::Write(const OctetString& value, uint16_t index, const TaskConfig& config)
+{
+    auto action
+        = [self = shared_from_this(), value, index, config]() -> void { self->context.Write(value, index, config); };
+    return executor->strand.post(action);
+}
+
 void MasterSessionStack::Restart(RestartType op, const RestartOperationCallbackT& callback, TaskConfig config)
 {
     auto action
